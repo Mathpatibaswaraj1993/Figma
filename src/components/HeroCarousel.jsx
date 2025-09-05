@@ -1,71 +1,75 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slides = [
   {
-    id: 1,
-    title: "Startup 3",
+    title: "Startup 1",
     heading: "Forget About Code",
-    text: "Startup Framework gives you complete freedom over your creative process — you don’t have to think about any technical aspects. There are no limits and absolutely no coding.",
+    description:
+      "Startup Framework gives you complete freedom over your creative process — you don’t have to think about any technical aspects. There are no limits and absolutely no coding.",
     button: "Create an Account",
     image:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80",
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80",
   },
   {
-    id: 2,
-    title: "Startup 3",
-    heading: "Build Faster",
-    text: "Quickly launch modern websites with responsive, pixel-perfect design.",
+    title: "Startup 2",
+    heading: "Launch Faster",
+    description:
+      "Get your product online faster with beautiful pre-designed components and templates.",
     button: "Get Started",
     image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
   },
   {
-    id: 3,
     title: "Startup 3",
-    heading: "Design with Freedom",
-    text: "No coding. Just creativity. Focus on what matters most.",
-    button: "Join Now",
+    heading: "Design Without Limits",
+    description:
+      "Easily customize layouts to match your vision. Build a unique online presence in minutes.",
+    button: "Start Free Trial",
     image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1600&q=80",
   },
 ];
 
-export default function HeroSection() {
+export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
 
-  const nextSlide = () =>
-    setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  const prevSlide = () =>
+  const prevSlide = () => {
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
-      {/* ✅ Navbar */}
-      <header className="absolute top-0 left-0 w-full py-6 px-10 flex justify-center md:justify-end space-x-10 text-white z-50 font-medium">
-        <Link to="/" className="hover:opacity-50">
-          Home
-        </Link>
-        <Link to="/features" className="hover:opacity-50">
-          Features
-        </Link>
-        <Link to="/pricing" className="hover:opacity-50">
-          Pricing
-        </Link>
-        <Link to="/blog" className="hover:opacity-50">
-          Blog
-        </Link>
-        <Link to="/be" className="hover:opacity-50">
-          Bē
-        </Link>
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Navbar */}
+      <header className="absolute top-0 left-0 w-full flex justify-center py-6 z-20">
+        <nav className="flex space-x-8 text-white text-lg font-medium">
+          <a href="/" className="hover:opacity-70">
+            Home
+          </a>
+          <a href="#features" className="hover:opacity-70">
+            Features
+          </a>
+          <a href="#pricing" className="hover:opacity-70">
+            Pricing
+          </a>
+          <a href="#blog" className="hover:opacity-70">
+            Blog
+          </a>
+          <a href="#be" className="hover:opacity-70">
+            Bē
+          </a>
+        </nav>
       </header>
 
-      {/* ✅ Slides */}
+      {/* Slides */}
       {slides.map((slide, index) => (
         <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+          key={index}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
             index === current ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -73,47 +77,49 @@ export default function HeroSection() {
           <img
             src={slide.image}
             alt={slide.heading}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
 
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60" />
 
           {/* Content */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-            <p className="text-white text-lg mb-2">{slide.title}</p>
-            <h1 className="text-5xl font-bold text-white mb-4">
+          <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-6 text-white">
+            <p className="text-lg mb-2">{slide.title}</p>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">
               {slide.heading}
             </h1>
-            <p className="text-gray-200 max-w-2xl mb-6">{slide.text}</p>
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-full text-lg font-medium shadow-lg">
+            <p className="max-w-2xl text-lg md:text-xl mb-6">
+              {slide.description}
+            </p>
+            <button className="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-full text-white text-lg font-semibold shadow-lg transition">
               {slide.button}
             </button>
           </div>
         </div>
       ))}
 
-      {/* ✅ Prev/Next Buttons */}
+      {/* Controls */}
       <button
         onClick={prevSlide}
-        className="absolute left-5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+        className="absolute left-6 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white z-20"
       >
-        <ChevronLeft size={28} />
+        <ChevronLeft className="w-6 h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-5 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+        className="absolute right-6 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white z-20"
       >
-        <ChevronRight size={28} />
+        <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* ✅ Dots */}
-      <div className="absolute bottom-6 w-full flex justify-center space-x-3">
+      {/* Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full ${
+            className={`w-3 h-3 rounded-full transition ${
               index === current ? "bg-white" : "bg-gray-400"
             }`}
           />

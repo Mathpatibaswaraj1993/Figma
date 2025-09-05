@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import HeroCarousel from "./components/HeroCarousel";
 import Content from "./components/ContactSection.jsx";
 import Testmonial from "./components/Testmonial.jsx";
@@ -30,29 +30,77 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef(null);
 
-  // Handle navigation
+  // Robust scroll — uses each slide's element rather than window.innerWidth
   const goToSlide = (index) => {
-    setCurrentIndex(index);
-    const width = window.innerWidth;
-    if (sliderRef.current) {
-      sliderRef.current.scrollTo({
-        left: width * index,
+    const container = sliderRef.current;
+    if (!container) return;
+    const slide = container.children[index];
+    if (slide) {
+      slide.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    } else {
+      // fallback
+      container.scrollTo({
+        left: container.clientWidth * index,
         behavior: "smooth",
       });
     }
+    // optimistic update (IntersectionObserver will also keep it correct)
+    setCurrentIndex(index);
   };
 
   const nextSlide = () => {
-    goToSlide((currentIndex + 1) % sections.length);
+    const next = (currentIndex + 1) % sections.length;
+    goToSlide(next);
   };
 
   const prevSlide = () => {
-    goToSlide((currentIndex - 1 + sections.length) % sections.length);
+    const prev = (currentIndex - 1 + sections.length) % sections.length;
+    goToSlide(prev);
   };
+
+  // Keep currentIndex in sync when user scrolls manually (or via buttons)
+  useEffect(() => {
+    const container = sliderRef.current;
+    if (!container) return;
+
+    const slides = Array.from(container.children);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = slides.indexOf(entry.target);
+            if (idx !== -1) setCurrentIndex(idx);
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.6, // consider a slide active when 60% visible
+      }
+    );
+
+    slides.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [sections.length]);
+
+  // optional: left/right keyboard navigation
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") nextSlide();
+      if (e.key === "ArrowLeft") prevSlide();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex]);
 
   return (
     <>
-      {/* ✅ Navbar (Fixed, not sliding) */}
+      {/* Navbar (Fixed) */}
       <header className="fixed top-0 left-0 w-full py-6 px-10 text-white bg-transparent z-50">
         <nav className="flex space-x-10 text-lg font-medium">
           <Link to="/" className="hover:opacity-50">
@@ -76,23 +124,26 @@ export default function App() {
         </nav>
       </header>
 
-      {/* ✅ Horizontal Slider */}
+      {/* Horizontal Slider */}
       <main className="relative flex items-center justify-center h-screen w-screen overflow-hidden">
         <div
           ref={sliderRef}
-          className="flex overflow-x-hidden snap-x snap-mandatory h-screen w-screen scroll-smooth"
+          // overflow-x-auto works well; inline style for touch-action
+          className="flex overflow-x-auto snap-x snap-mandatory h-screen w-screen scroll-smooth no-scrollbar"
+          style={{ touchAction: "pan-x" }}
         >
           {sections.map((Section, index) => (
             <section
               key={index}
-              className="flex-shrink-0 w-screen h-screen snap-center flex items-center justify-center"
+              // snap-start ensures left-aligned snapping (predictable)
+              className="flex-shrink-0 w-screen h-screen snap-start flex items-center justify-center"
             >
               {Section}
             </section>
           ))}
         </div>
 
-        {/* ◀ ▶ Navigation Buttons */}
+        {/* Prev / Next */}
         <button
           onClick={prevSlide}
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black"
@@ -106,12 +157,13 @@ export default function App() {
           ▶
         </button>
 
-        {/* 🔘 Dots Navigation */}
+        {/* Dots */}
         <div className="absolute bottom-6 flex space-x-3">
           {sections.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
               className={`w-3 h-3 rounded-full ${
                 index === currentIndex ? "bg-white" : "bg-gray-400"
               }`}
@@ -120,7 +172,7 @@ export default function App() {
         </div>
       </main>
 
-      {/* ✅ Footer (Fixed after slider) */}
+      {/* Footer */}
       <Footer />
     </>
   );

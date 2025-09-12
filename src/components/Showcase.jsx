@@ -1,9 +1,9 @@
 import React from "react";
 
-import img1 from "../assets/P1.png";
-import img2 from "../assets/p2.png";
-import img3 from "../assets/p3.png";
-import img4 from "../assets/p4.png";
+import img1 from "../assets/pho1.png";
+import img2 from "../assets/pho2.png";
+import img3 from "../assets/pho3.png";
+import img4 from "../assets/pho4.png";
 
 function Showcase() {
   const images = [

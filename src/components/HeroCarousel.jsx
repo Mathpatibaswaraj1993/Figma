@@ -3,7 +3,7 @@ import { FaGlobe } from "react-icons/fa";
 
 export default function Hero() {
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-screen w-full bg-blue-800">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -52,7 +52,7 @@ export default function Hero() {
         </p>
 
         {/* Button */}
-        <button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-full shadow-lg transition">
+        <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full shadow-lg transition">
           Create an Account
         </button>
 

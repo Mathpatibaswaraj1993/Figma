@@ -1,4 +1,5 @@
 import React from "react";
+import { FaGlobe } from "react-icons/fa";
 
 export default function Hero() {
   return (
@@ -30,6 +31,9 @@ export default function Hero() {
         </a>
         <a href="#" className="hover:text-purple-300">
           Bē
+        </a>
+        <a href="#" className="hover:text-purple-300">
+          <FaGlobe className="inline text-white-600" />
         </a>
       </nav>
 

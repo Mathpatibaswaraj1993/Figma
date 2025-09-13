@@ -17,7 +17,7 @@ export default function PricingSection() {
         "Collaboration tools",
         "User management",
       ],
-      buttonColor: "bg-purple-600 hover:bg-purple-700",
+      buttonColor: "bg-gray-200 text-black hover:bg-gray-300",
     },
     {
       name: "Professional",
@@ -34,7 +34,7 @@ export default function PricingSection() {
         "Collaboration tools",
         "User management",
       ],
-      buttonColor: "bg-pink-600 hover:bg-pink-700",
+      buttonColor: "bg-pink-600 hover:bg-pink-700 text-white",
     },
     {
       name: "Team",
@@ -51,13 +51,12 @@ export default function PricingSection() {
         "Collaboration tools",
         "User management",
       ],
-      buttonColor: "bg-purple-600 hover:bg-purple-700",
+      buttonColor: "bg-gray-200 text-black hover:bg-gray-300",
     },
   ];
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-indigo-900 to-purple-900 text-white">
-      {/* Content wrapper */}
       <div className="max-w-6xl mx-auto px-6 text-center">
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Plans & Pricing</h2>
@@ -88,7 +87,7 @@ export default function PricingSection() {
               </ul>
 
               <button
-                className={`px-6 py-3 rounded-full font-semibold text-white transition ${plan.buttonColor}`}
+                className={`px-6 py-3 rounded-full font-semibold transition ${plan.buttonColor}`}
               >
                 Get Started
               </button>

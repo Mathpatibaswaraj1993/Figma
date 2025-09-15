@@ -7,7 +7,7 @@ export default function HeroSection() {
       style={{ backgroundImage: "url('/form1.jpg')" }}
     >
       {/* Overlay for better text visibility */}
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0  bg-opacity-50"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl">
